@@ -1,16 +1,14 @@
-FROM ubuntu:latest
+FROM python:3.9
 
-# Set the working directory in the image
 WORKDIR /app
 
-# Copy the files from the host file system to the image file system
-COPY . /app
+COPY requirements.txt /app
+COPY devops /app
 
-# Install the necessary packages
-RUN apt-get update && apt-get install -y python3 python3-pip
+ENV PIP_BREAK_SYSTEM_PACKAGES 1
 
-# Set environment variables
-ENV NAME World
+RUN pip install -r requirements.txt
+Run python manage.py migrate
 
-# Run a command to start the application
-CMD ["python3", "app.py"]
+ENTRYPOINT ["python3"]
+CMD ["manage.py", "runserver", "0.0.0.0:8000"]
